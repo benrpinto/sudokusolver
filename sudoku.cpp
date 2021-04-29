@@ -6,8 +6,8 @@
 using namespace std;
 
 int main(int argc, char** argv){
-   SudokuPuzzle myPuzzle;
-
+   short inputDigits[NUM_DIGITS*NUM_DIGITS];
+   int counter = 0;
    string filename;
    FILE* puzzleFile;
    getline(cin,filename);
@@ -18,7 +18,7 @@ int main(int argc, char** argv){
       cout<<"file not found\n";
    }else{
       char ch;
-      int digit;
+      short digit;
       for(int row = 0; row < 9; row++){
          for(int col = 0; col < 9; col++){
             ch = getc(puzzleFile);
@@ -27,14 +27,19 @@ int main(int argc, char** argv){
             }else{
                digit = 0;
             }
+            inputDigits[counter] = digit;
+            counter++;
             cout<<digit;
          }
          //read and throw out the newline
          getc(puzzleFile);
          cout<<"\n";
       }
+      //don't keep the file open longer than needed.
+      fclose(puzzleFile);
+
+      SudokuPuzzle myPuzzle(inputDigits);
    }
 
-   fclose(puzzleFile);
    return 0;
 }
