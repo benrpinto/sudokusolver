@@ -1,7 +1,8 @@
 #include<iostream>
 #include<fstream>
 #include<string>
-#include"sudoku.cpp"
+#include"sudoku.h"
+#include"test.h"
 
 using namespace std;
 
@@ -39,6 +40,8 @@ int main(int argc, char** argv){
       fclose(puzzleFile);
 
       SudokuPuzzle myPuzzle(inputDigits);
+      Test myTest;
+      myTest.findNull(myPuzzle);
       cout<<"initialised\n";
       cout<<myPuzzle.display();
       cout<<"solving\n";

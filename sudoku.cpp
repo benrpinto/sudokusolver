@@ -1,5 +1,4 @@
 #include"sudoku.h"
-#include<cassert>
 #define NUM_GROUPS 3
 //3 different groups, cols, rows, and boxes
 #include<iostream>
@@ -167,7 +166,6 @@ SudokuPuzzle::SudokuPuzzle(int input[NUM_DIGITS*NUM_DIGITS]){
 }
 
 void SudokuPuzzle::solve(){
-   findNull();
    GroupOfNine *solveOrder[NUM_DIGITS*NUM_GROUPS];
    int focus = 0;
    int counter = 0;
@@ -186,22 +184,5 @@ void SudokuPuzzle::solve(){
       }
       counter++;
       focus = (focus + 1)%(NUM_DIGITS*NUM_GROUPS);
-   }
-}
-
-
-void SudokuPuzzle::findNull(){
-   for(int a = 0; a < NUM_DIGITS; a++){
-      for(int b = 0; b < NUM_DIGITS; b++){
-         assert(rows[a].contents[b] != NULL);
-         assert(cols[b].contents[a] != NULL);
-      }
-   }
-   for(int a = 0; a < SQRT_DIG; a++){
-      for(int b = 0; b < SQRT_DIG; b++){
-         for(int c = 0; c < NUM_DIGITS; c++){
-            assert(boxes[a][b].contents[c]!= NULL);
-         }
-      }
    }
 }
