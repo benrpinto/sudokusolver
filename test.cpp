@@ -19,16 +19,12 @@ void Test::findNull(SudokuPuzzle toCheck){
    std::cout<<"Null check passed\n";
 }
 
-void Test::testAssign(int input[NUM_DIGITS*NUM_DIGITS]){
-   int testCopy[NUM_DIGITS*NUM_DIGITS];
+void Test::testAssign(std::array<int, NUM_DIGITS*NUM_DIGITS> input){
+   std::array<int, NUM_DIGITS*NUM_DIGITS> testCopy;
+   testCopy = input;
    int counter = 0;
    int temp = 0;
    DigitBox *focus;
-   for(int a = 0; a < NUM_DIGITS*NUM_DIGITS;a++){
-      assert(input[a] >= 0);
-      assert(input[a] <= NUM_DIGITS);
-      testCopy[a] = input[a];
-   }
    SudokuPuzzle toCheck(input);
 
    //check that the pointers in the groups point to the same digitbox.

@@ -1,6 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<array>
 #include"sudoku.h"
 #include"test.h"
 
@@ -11,10 +12,12 @@ using namespace std;
 
 
 int main(int argc, char** argv){
-   int inputDigits[NUM_DIGITS*NUM_DIGITS];
+   std::array<int, NUM_DIGITS*NUM_DIGITS> inputDigits;
    int counter = 0;
    string filename;
    FILE* puzzleFile;
+
+   std::cout<<"enter puzzle filename:\n";
    getline(cin,filename);
 
    //extract the puzzle from the file

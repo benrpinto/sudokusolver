@@ -1,5 +1,6 @@
 #pragma once
 #include<string>
+#include<array>
 #define NUM_DIGITS 9
 //number of digits in a sudoku, so 0 doesn't count
 #define SQRT_DIG 3
@@ -13,7 +14,7 @@ class SudokuPuzzle;
 class DigitBox{
    private:
    int filled;
-   bool options[NUM_DIGITS+1];
+   std::array<bool, NUM_DIGITS+1> options;
    //setting array size to + 1
    //so we don't have to adjust indexes when working.
    public:
@@ -29,8 +30,8 @@ class DigitBox{
 class GroupOfNine{
    private:
    bool completed;
-   DigitBox *contents[NUM_DIGITS];
-   int filled[NUM_DIGITS+1];
+   std::array<DigitBox *, NUM_DIGITS> contents;
+   std::array<int, NUM_DIGITS+1> filled;
    void check();
    public:
    friend class Test;
@@ -38,20 +39,22 @@ class GroupOfNine{
    void set(DigitBox *input,int location);
    void consolidate();
    bool isComplete();
+   bool validate();
 };
 
 class SudokuPuzzle{
    private:
-   DigitBox individual[NUM_DIGITS][NUM_DIGITS];
-   GroupOfNine rows[NUM_DIGITS];
-   GroupOfNine cols[NUM_DIGITS];
-   GroupOfNine boxes[SQRT_DIG][SQRT_DIG];
+   std::array<std::array<DigitBox, NUM_DIGITS>, NUM_DIGITS> individual;
+   std::array<GroupOfNine, NUM_DIGITS> rows;
+   std::array<GroupOfNine, NUM_DIGITS> cols;
+   std::array<std::array<GroupOfNine, SQRT_DIG>, SQRT_DIG> boxes;
 
    public:
    friend class Test;
    SudokuPuzzle();
-   SudokuPuzzle(int input[NUM_DIGITS*NUM_DIGITS]);
+   SudokuPuzzle(std::array<int,NUM_DIGITS*NUM_DIGITS> input);
    void solve();
    std::string display();
+   bool validate();
 };
 

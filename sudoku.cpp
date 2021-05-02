@@ -5,12 +5,7 @@
 //included for debugging purposes
 
 DigitBox::DigitBox(int input){
-   bool empty = (input==0);
-   filled = input;
-   options[0] = false;
-   for(int a = 1 ; a <= NUM_DIGITS; a++){
-      options[a] = (empty)||(a == filled);
-   }
+   set(input);
 }
 
 DigitBox::DigitBox(){
@@ -18,11 +13,13 @@ DigitBox::DigitBox(){
 }
 
 void DigitBox::set(int input){
-   bool empty = (input==0);
-   filled = input;
-   options[0] = false;
-   for(int a = 1 ; a <= NUM_DIGITS; a++){
-      options[a] = (empty)||(a == filled);
+   if(input > 0 && input <= NUM_DIGITS){
+      options.fill(false);
+      filled = input;
+      options[filled] = true;
+   }else{
+      options.fill(true);
+      filled = 0;
    }
 }
 
@@ -37,7 +34,6 @@ int DigitBox::removeOption(int toRemove){
       toReturn = filled;
    }else if(options[toRemove]){
       options[toRemove] = false;
-      toReturn = NONE_FOUND;
       for(int a = 1; a <= NUM_DIGITS; a++){
          if(options[a]){
             if(tempReturn == NONE_FOUND){
@@ -61,10 +57,8 @@ int DigitBox::removeOption(int toRemove){
 
 GroupOfNine::GroupOfNine(){
    completed = false;
-   for(int a = 0; a < NUM_DIGITS; a++){
-      contents[a] = NULL;
-      filled[a+1] = false;
-   }
+   contents.fill(NULL);
+   filled.fill(false);
 }
 void GroupOfNine::set(DigitBox *input,int location){
    int focus;
@@ -76,17 +70,16 @@ void GroupOfNine::set(DigitBox *input,int location){
 }
 
 bool GroupOfNine::isComplete(){
-   bool tempComplete = true;
+   bool toReturn = true;
+   int loc = 0;
    if(!completed){
-      check();
-      for(int loc = 0; loc <NUM_DIGITS;loc++){
-         if(contents[loc]->get() == 0){
-            tempComplete = false;
-         }
+      while(loc < NUM_DIGITS && toReturn){
+         toReturn = contents[loc]->get() != 0;
+         loc++;
       }
-      completed = tempComplete;
+      completed = toReturn;
    }
-   return completed;
+   return toReturn;
 }
 
 void GroupOfNine::check(){
@@ -97,6 +90,7 @@ void GroupOfNine::check(){
    }
 }
 void GroupOfNine::consolidate(){
+   check();
    int focus = 0;
    if(!completed){
       for(int dig = 1; dig <= NUM_DIGITS; dig++){
@@ -112,6 +106,22 @@ void GroupOfNine::consolidate(){
    }
 }
 
+bool GroupOfNine::validate(){
+   bool toReturn = true;
+   int focus;
+   int loc = 0;
+   bool found[NUM_DIGITS+1] = {0};
+   while(loc < NUM_DIGITS && toReturn){
+      focus = contents[loc]->get();
+      if(focus != 0){
+         toReturn = !found[focus];
+         found[focus] = true;
+      }
+      loc++;
+   }
+   return toReturn;
+}
+
 //std::ostream & operator<<(std::ostream & Str, SudokuPuzzle const & v){
 //   Str << v.display();
 //   return Str;
@@ -121,12 +131,8 @@ std::string SudokuPuzzle::display(){
    std::string toReturn = "";
    for(int irow = 0; irow < NUM_DIGITS;irow++){
       for(int icol = 0; icol < NUM_DIGITS;icol++){
-         if(individual[irow*NUM_DIGITS+icol] != NULL){
-            int temp = individual[irow][icol].get();
-            toReturn = toReturn + std::to_string(temp);
-         }else{
-            toReturn = toReturn + "0";
-         }
+         int temp = individual[irow][icol].get();
+         toReturn = toReturn + std::to_string(temp);
       }
       toReturn = toReturn + "\n";
    }
@@ -146,27 +152,24 @@ SudokuPuzzle::SudokuPuzzle(){
    }
 }
 
-SudokuPuzzle::SudokuPuzzle(int input[NUM_DIGITS*NUM_DIGITS]){
+SudokuPuzzle::SudokuPuzzle(std::array<int,NUM_DIGITS*NUM_DIGITS> input){
    int counter = 0;
    int temp = 0;
-   if(input == NULL){
-      SudokuPuzzle();
-   }else{
-      for (int irow = 0; irow < NUM_DIGITS; irow++){
-         for(int icol = 0; icol < NUM_DIGITS; icol++){
-            individual[irow][icol].set(input[counter]);
-            rows[irow].set(&individual[irow][icol],icol);
-            cols[icol].set(&individual[irow][icol],irow);
-            temp = (irow%SQRT_DIG)*SQRT_DIG + icol%SQRT_DIG;
-            boxes[irow/SQRT_DIG][icol/SQRT_DIG].set(&individual[irow][icol],temp);
-            counter++;
-         }
+   for (int irow = 0; irow < NUM_DIGITS; irow++){
+      for(int icol = 0; icol < NUM_DIGITS; icol++){
+         individual[irow][icol].set(input[counter]);
+         rows[irow].set(&individual[irow][icol],icol);
+         cols[icol].set(&individual[irow][icol],irow);
+         temp = (irow%SQRT_DIG)*SQRT_DIG + icol%SQRT_DIG;
+         boxes[irow/SQRT_DIG][icol/SQRT_DIG].set(&individual[irow][icol],temp);
+         counter++;
       }
    }
 }
 
 void SudokuPuzzle::solve(){
-   GroupOfNine *solveOrder[NUM_DIGITS*NUM_GROUPS];
+   validate();
+   std::array<GroupOfNine *, NUM_DIGITS*NUM_GROUPS> solveOrder;
    int focus = 0;
    int counter = 0;
    for(int a = 0; a < NUM_DIGITS;a++){
@@ -185,4 +188,32 @@ void SudokuPuzzle::solve(){
       counter++;
       focus = (focus + 1)%(NUM_DIGITS*NUM_GROUPS);
    }
+   validate();
 }
+
+bool SudokuPuzzle::validate(){
+   bool toReturn = true;
+   int counter = 0;
+   while(counter < NUM_DIGITS && toReturn){
+      toReturn = rows[counter].validate();
+      counter++;
+   }
+   counter = 0;
+   while(counter < NUM_DIGITS && toReturn){
+      toReturn = cols[counter].validate();
+      counter++;
+   }
+   counter = 0;
+   while(counter < NUM_DIGITS && toReturn){
+      toReturn = boxes[counter/SQRT_DIG][counter%SQRT_DIG].validate();
+      counter++;
+   }
+   if(toReturn){
+      std::cout<<"valid puzzle\n";
+   }else{
+      std::cout<<"invalid puzzle\n";
+   }
+
+   return toReturn;
+}
+
