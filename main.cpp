@@ -4,7 +4,11 @@
 #include"sudoku.h"
 #include"test.h"
 
+#define RUNTESTS true
+
 using namespace std;
+
+
 
 int main(int argc, char** argv){
    int inputDigits[NUM_DIGITS*NUM_DIGITS];
@@ -39,9 +43,16 @@ int main(int argc, char** argv){
       //don't keep the file open longer than needed.
       fclose(puzzleFile);
 
+      if(RUNTESTS){
+         cout<<"running tests\n";
+         Test myTest;
+         SudokuPuzzle testPuzzle(inputDigits);
+         myTest.findNull(testPuzzle);
+         myTest.testAssign(inputDigits);
+         cout<<"All tests passed! :D\n";
+      }
+
       SudokuPuzzle myPuzzle(inputDigits);
-      Test myTest;
-      myTest.findNull(myPuzzle);
       cout<<"initialised\n";
       cout<<myPuzzle.display();
       cout<<"solving\n";
