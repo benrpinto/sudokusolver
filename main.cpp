@@ -3,6 +3,7 @@
 #include<string>
 #include<array>
 #include"sudoku.h"
+#include"DFSSolve.h"
 #include"test.h"
 
 #define RUNTESTS true
@@ -49,19 +50,21 @@ int main(int argc, char** argv){
       if(RUNTESTS){
          cout<<"running tests\n";
          Test myTest;
-         SudokuPuzzle testPuzzle(inputDigits);
+         //SudokuPuzzle testPuzzle(inputDigits);
+         DFSSolve testPuzzle(inputDigits);
          myTest.findNull(testPuzzle);
          myTest.testAssign(inputDigits);
          cout<<"All tests passed! :D\n";
       }
 
-      SudokuPuzzle myPuzzle(inputDigits);
+      //SudokuPuzzle toSolve(inputDigits);
+      DFSSolve toSolve(inputDigits);
       cout<<"initialised\n";
-      cout<<myPuzzle.display();
+      cout<<toSolve.display();
       cout<<"solving\n";
-      myPuzzle.solve();
+      toSolve.solve();
       cout<<"solved\n";
-      cout<<myPuzzle.display();
+      cout<<toSolve.display();
    }
    return 0;
 }

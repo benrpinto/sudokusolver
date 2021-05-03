@@ -25,6 +25,7 @@ class DigitBox{
    int get();
    //removes an option, and checks if this digit can be solved
    int removeOption(int input);
+   void reset();
 };
 
 class GroupOfNine{
@@ -40,10 +41,11 @@ class GroupOfNine{
    void consolidate();
    bool isComplete();
    bool validate();
+   void reset();
 };
 
 class SudokuPuzzle{
-   private:
+   protected:
    std::array<std::array<DigitBox, NUM_DIGITS>, NUM_DIGITS> individual;
    std::array<GroupOfNine, NUM_DIGITS> rows;
    std::array<GroupOfNine, NUM_DIGITS> cols;
@@ -53,8 +55,11 @@ class SudokuPuzzle{
    friend class Test;
    SudokuPuzzle();
    SudokuPuzzle(std::array<int,NUM_DIGITS*NUM_DIGITS> input);
+   //SudokuPuzzle(SudokuPuzzle &input);
+   std::array<int,NUM_DIGITS*NUM_DIGITS> arrayOut();
    void solve();
    std::string display();
    bool validate();
+   void reset();
 };
 
