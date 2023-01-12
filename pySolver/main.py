@@ -1,7 +1,5 @@
 from constant import *
 from sudoku import *
-from DFSSolve import *
-from test import *
 
 #intentionally including types, even though python doesn't require it
 
@@ -27,6 +25,8 @@ def main():
       print("Could not read file:", filename)
 
     myPuzzle:SudokuPuzzle = SudokuPuzzle(inputDigits)
+    print(myPuzzle.display())
+    myPuzzle.solve()
     print(myPuzzle.display())
 
 
