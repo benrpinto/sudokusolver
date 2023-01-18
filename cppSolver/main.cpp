@@ -28,9 +28,9 @@ int main(int argc, char **argv){
       puzzleFile.close();
 
       SudokuPuzzle myPuzzle = SudokuPuzzle(inputDigits);
-      cout << myPuzzle.display();
+      cout << myPuzzle.display()<<"\n";
       myPuzzle.solve();
-      cout<< myPuzzle.display();
+      cout<< myPuzzle.display()<<"\n";
 
    }else{
       cout<<"Could not read file:"<<filename<<"\n";
