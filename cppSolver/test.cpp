@@ -48,7 +48,7 @@ int main(int argc, char **argv){
             if(myPuzzle.display() == aText.str()){
                cout<<"Pass: "<<questionFiles[a]<<"\n";
             }else{
-               cout<<"Pass: "<<questionFiles[a]<<"\n";
+               cout<<"Fail: "<<questionFiles[a]<<"\n";
             }
             aFile.close();
 
