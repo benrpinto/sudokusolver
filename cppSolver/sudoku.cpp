@@ -54,7 +54,7 @@ bool SudokuPuzzle::quickValidate(int row, int col, int toCheck){
       toReturn = false;
    }else{
       int box = (int(col/SQRT_DIG)) + SQRT_DIG*(int(row/SQRT_DIG));
-      unsigned short int digitFlag = 1 << (individual[row][col]-1);
+      unsigned short int digitFlag = 1 << (toCheck-1);
       toReturn = toReturn && not(digitFlag & rowDigits[row]);
       toReturn = toReturn && not(digitFlag & colDigits[col]);
       toReturn = toReturn && not(digitFlag & boxDigits[box]);
@@ -68,13 +68,13 @@ void SudokuPuzzle::placeDigit(int row, int col, int toPlace){
       cout<<"Internal error: placing cell out of bounds\n";
    }else if(fixedCell[row][col]){
       cout<<"Internal error: placing in fixed cell\n";
-   }else if(toPlace < 0 || toPlace > NUM_DIGITS){
+   }else if(toPlace <= 0 || toPlace > NUM_DIGITS){
       cout<<"Error: placing invalid digit\n";
    }else if(individual[row][col] != 0){
       cout<<"Error: placing in occupied cell\n";
    }else{
       int box = (int(col/SQRT_DIG)) + SQRT_DIG*(int(row/SQRT_DIG));
-      unsigned short int digitFlag = 1 << (individual[row][col]-1);
+      unsigned short int digitFlag = 1 << (toPlace-1);
       individual[row][col] = toPlace;
       rowDigits[row] ^= digitFlag;
       colDigits[col] ^= digitFlag;
@@ -90,6 +90,8 @@ void SudokuPuzzle::removeDigit(int row, int col){
       cout<<"Internal error: attempting to clear fixed cell\n";
    }else if(individual[row][col] < 0 || individual[row][col] > NUM_DIGITS){
       cout<<"Error: cell has invalid digit\n";
+   }else if(individual[row][col] == 0){
+      cout<<"Error: cell is already clear\n";
    }else{
       int box = (int(col/SQRT_DIG)) + SQRT_DIG*(int(row/SQRT_DIG));
       unsigned short int digitFlag = 1 << (individual[row][col]-1);
@@ -133,7 +135,7 @@ void SudokuPuzzle::solve(){
             index += direction;
          }else{
             direction = -1;
-            index -= direction;
+            index += direction;
          }
       }
    }
