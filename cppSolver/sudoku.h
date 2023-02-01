@@ -11,9 +11,17 @@ class SudokuPuzzle{
    protected:
       array<array<int,NUM_DIGITS>,NUM_DIGITS> individual;
       array<array<bool,NUM_DIGITS>,NUM_DIGITS> fixedCell;
+
+      array<unsigned short int, NUM_DIGITS> rowDigits;
+      array<unsigned short int, NUM_DIGITS> colDigits;
+      array<unsigned short int, NUM_DIGITS> boxDigits;
+
+      bool quickValidate(int row, int col, int toCheck);
+      void placeDigit(int row, int col, int toPlace);
+      void removeDigit(int row, int col);
+
    public:
       SudokuPuzzle(array<int,NUM_DIGITS*NUM_DIGITS> input);
       string display();
-      bool quickValidate(int row, int col);
       void solve();
 };
