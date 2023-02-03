@@ -1,2 +1,6 @@
 *.out
 */__pycache__
+
+rustSolver/sudoku_cargo/target/
+**/*.rs.bk
+*.pdb
