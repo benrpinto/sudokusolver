@@ -132,11 +132,10 @@ void SudokuPuzzle::solve(){
          if(foundValidDigit){
             placeDigit(row,col,toCheck);
             direction = 1;
-            index += direction;
          }else{
             direction = -1;
-            index += direction;
          }
+         index += direction;
       }
    }
    if(index < 0){
