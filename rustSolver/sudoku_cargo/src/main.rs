@@ -26,15 +26,20 @@ fn test() {
             "../../test puzzles/AI Escargotsol.txt",
             ];
 
-    let raw_v:Result<Vec<u8>,std::io::Error> = filepath_to_numbers(question_files[0].to_string());
+    let num_tests:usize = question_files.len();
+    for a in 0..=(num_tests - 1){
+        let raw_q_in:Result<Vec<u8>,std::io::Error> = filepath_to_numbers(question_files[a].to_string());
 
-    if let Ok(v) = raw_v {
-        let my_puzzle:sudoku::SudokuPuzzle = sudoku::SudokuPuzzle::new(v);
-        println!("{}",my_puzzle.display());
-    }else if let Err(_) = raw_v{
-        let mut error_message:String = "Could not read file:".to_string();
-        error_message.push_str(&question_files[0]);
-        println!("{}",&error_message);
+        if let Ok(input_digits) = raw_q_in {
+            let mut my_puzzle:sudoku::SudokuPuzzle = sudoku::SudokuPuzzle::new(input_digits);
+            my_puzzle = my_puzzle.solve();
+            println!("{}",my_puzzle.display());
+            
+        }else if let Err(_) = raw_q_in{
+            let mut error_message:String = "Could not read file:".to_string();
+            error_message.push_str(&question_files[a]);
+            println!("{}",&error_message);
+        }
     }
 }
 
