@@ -22,10 +22,13 @@ fn user(){
     let raw_q_in:Result<Vec<u8>,std::io::Error> = filepath_to_numbers(filename.to_string());
 
     if let Ok(input_digits) = raw_q_in {
-        let mut my_puzzle:sudoku::SudokuPuzzle = sudoku::SudokuPuzzle::new(input_digits);
+        let my_puzzle:sudoku::SudokuPuzzle = sudoku::SudokuPuzzle::new(input_digits);
         println!("{}",my_puzzle.display());
-        my_puzzle = my_puzzle.solve();
-        println!("{}",my_puzzle.display());
+        if let Some(result) = my_puzzle.solve(){
+            println!("{}",result.display());
+        }else{
+            println!("Error: could not solve Sudoku");
+        }
 
     }else if let Err(_) = raw_q_in{
         let mut error_message:String = "Could not read file:".to_string();
@@ -42,12 +45,14 @@ fn test() {
             "../../test puzzles/easy02.txt",
             "../../test puzzles/tough01.txt",
             "../../test puzzles/AI Escargot.txt",
+            "../../test puzzles/malformed01.txt",
             ];
     let answer_files:Vec<&str> = vec![
             "../../test puzzles/easy01sol.txt",
             "../../test puzzles/easy02sol.txt",
             "../../test puzzles/tough01sol.txt",
             "../../test puzzles/AI Escargotsol.txt",
+            "../../test puzzles/unsol.txt",
             ];
 
     let num_tests:usize = question_files.len();
@@ -55,9 +60,13 @@ fn test() {
         let raw_q_in:Result<Vec<u8>,std::io::Error> = filepath_to_numbers(question_files[a].to_string());
 
         if let Ok(input_digits) = raw_q_in {
-            let mut my_puzzle:sudoku::SudokuPuzzle = sudoku::SudokuPuzzle::new(input_digits);
-            my_puzzle = my_puzzle.solve();
-            let q_text:String = my_puzzle.display();
+            let my_puzzle:sudoku::SudokuPuzzle = sudoku::SudokuPuzzle::new(input_digits);
+            let q_text:String;
+            if let Some(result) = my_puzzle.solve(){
+                q_text = result.display();
+            }else{
+                q_text = "Error: could not solve Sudoku\n".to_string();
+            }
 
             let wrapped_answer:Result<String,std::io::Error> = fs::read_to_string(answer_files[a].to_string());
             if let Ok(a_text) = wrapped_answer{
@@ -65,6 +74,8 @@ fn test() {
                     println!("Pass: {}",&question_files[a]);
                 }else{
                     println!("Fail: {}",&question_files[a]);
+                    println!("Expected:\n{}",&a_text);
+                    println!("Received:\n{}",&q_text);
                 }
             }else if let Err(_) = wrapped_answer{
                 let mut error_message:String = "Could not read file:".to_string();

@@ -10,13 +10,15 @@ int main(int argc, char **argv){
             "../test puzzles/easy01.txt",
             "../test puzzles/easy02.txt",
             "../test puzzles/tough01.txt",
-            "../test puzzles/AI Escargot.txt"
+            "../test puzzles/AI Escargot.txt",
+            "../test puzzles/malformed01.txt"
    };
    vector<string> answerFiles = {
             "../test puzzles/easy01sol.txt",
             "../test puzzles/easy02sol.txt",
             "../test puzzles/tough01sol.txt",
-            "../test puzzles/AI Escargotsol.txt"
+            "../test puzzles/AI Escargotsol.txt",
+            "../test puzzles/unsol.txt"
    };
 
    int numTests = questionFiles.size();
@@ -39,13 +41,19 @@ int main(int argc, char **argv){
          qFile.close();
          
          SudokuPuzzle myPuzzle = SudokuPuzzle(inputDigits);
-         myPuzzle.solve();
+         string qText;
+         if(myPuzzle.solve()){
+            qText = myPuzzle.display();
+         }else{
+            qText = "Error: could not solve Sudoku\n";
+
+         }
 
          ifstream aFile (answerFiles[a]);
          if(aFile.is_open()){
             stringstream aText;
             aText << aFile.rdbuf();
-            if(myPuzzle.display() == aText.str()){
+            if(qText == aText.str()){
                cout<<"Pass: "<<questionFiles[a]<<"\n";
             }else{
                cout<<"Fail: "<<questionFiles[a]<<"\n";

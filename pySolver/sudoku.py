@@ -96,7 +96,7 @@ class SudokuPuzzle:
             self.boxDigits[box] = self.boxDigits[box] ^ digitFlag
 
 
-    def solve(self):
+    def solve(self) -> bool:
         index:int = 0 
         trying:int = 1
         direction:int = 1
@@ -131,6 +131,4 @@ class SudokuPuzzle:
                 else:
                     direction = -1
                     index = index + direction
-
-        if(index < 0):
-            print("Error: could not solve Sudoku")
+        return index >= 0

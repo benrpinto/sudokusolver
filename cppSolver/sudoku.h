@@ -23,5 +23,5 @@ class SudokuPuzzle{
    public:
       SudokuPuzzle(array<int,NUM_DIGITS*NUM_DIGITS> input);
       string display();
-      void solve();
+      bool solve();
 };
