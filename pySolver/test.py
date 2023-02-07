@@ -7,13 +7,15 @@ def main():
             "../test puzzles/easy01.txt",\
             "../test puzzles/easy02.txt",\
             "../test puzzles/tough01.txt",\
-            "../test puzzles/AI Escargot.txt"\
+            "../test puzzles/AI Escargot.txt",\
+            "../test puzzles/malformed01.txt"\
             ]
     answerFiles:list[str] = [\
             "../test puzzles/easy01sol.txt",\
             "../test puzzles/easy02sol.txt",\
             "../test puzzles/tough01sol.txt",\
-            "../test puzzles/AI Escargotsol.txt"\
+            "../test puzzles/AI Escargotsol.txt",\
+            "../test puzzles/unsol.txt"\
             ]
     for q, a in zip (questionFiles,answerFiles):
         try:
@@ -41,9 +43,14 @@ def main():
             print("Could not read file:", q)
 
 def compare(question:list, answer:str)->bool:
+    qText:str
     testA:SudokuPuzzle = SudokuPuzzle(question)
-    testA.solve()
-    return testA.display() == answer
+    if(testA.solve()):
+        qText = testA.display()
+    else:
+        qText = "Error: could not solve Sudoku\n"
+
+    return qText == answer
 
 
 if __name__ == "__main__":

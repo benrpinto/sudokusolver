@@ -102,7 +102,7 @@ void SudokuPuzzle::removeDigit(int row, int col){
    }
 }
 
-void SudokuPuzzle::solve(){
+bool SudokuPuzzle::solve(){
    int index = 0;
    int direction = 1;
    //forwards is 1 backwards is -1
@@ -138,7 +138,5 @@ void SudokuPuzzle::solve(){
          index += direction;
       }
    }
-   if(index < 0){
-      cout<<"Error: could not solve Sudoku\n";
-   }
+   return index >= 0;
 }

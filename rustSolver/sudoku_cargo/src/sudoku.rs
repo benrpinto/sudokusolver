@@ -158,7 +158,7 @@ impl SudokuPuzzle {
         self
     }
 
-    pub fn solve(mut self) -> Self {
+    pub fn solve(mut self) -> Option<Self> {
         let mut index:isize = 0;
         let mut direction:isize = 1;
         let max_size:isize = (SIZE_DIGITS*SIZE_DIGITS).try_into().unwrap();
@@ -188,7 +188,11 @@ impl SudokuPuzzle {
                 index += direction;
             }
         }
-        self
+        if index < 0 {
+            None
+        }else{
+            Some(self)
+        }
     }
 
     pub fn display(&self) -> String {

@@ -26,8 +26,11 @@ def main():
 
     myPuzzle:SudokuPuzzle = SudokuPuzzle(inputDigits)
     print(myPuzzle.display())
-    myPuzzle.solve()
-    print(myPuzzle.display())
+    if(myPuzzle.solve()):
+        print(myPuzzle.display())
+    else:
+        print("Error: could not solve Sudoku")
+
 
 
 if __name__ == "__main__":
