@@ -92,22 +92,20 @@ fn test() {
 
 
 fn filepath_to_numbers(filepath: String)-> Result<Vec<u8>,std::io::Error>{
-    let mut wrapped_return = Ok(vec![]);
-    let mut to_return:Vec<u8> = vec![];
     let wrapped_contents:Result<String,std::io::Error> = fs::read_to_string(filepath);
 
-    if let Ok(raw_contents) = wrapped_contents{
-        let byte_contents: &[u8] = raw_contents.as_bytes();
-        for (_,&item) in byte_contents.iter().enumerate(){
-            match item {
-                b' ' => to_return.push(0),
-                b'1'..=b'9' => to_return.push((item - b'0') as u8),
-                _ =>(),
-            }
-        }
-        wrapped_return = Ok(to_return);
-    }else if let Err(a) = wrapped_contents{
-        wrapped_return = Err(a);
+    match wrapped_contents {
+        Ok(raw_contents) =>{
+            let byte_contents: &[u8] = raw_contents.as_bytes();
+            Ok(byte_contents.iter().fold(vec![],| mut my_output: Vec<u8>, &item|{
+                match item {
+                    b' ' => my_output.push(0),
+                    b'1'..=b'9' => my_output.push((item - b'0') as u8),
+                    _ =>(),
+                };
+                my_output
+            }))
+        },
+        Err(a) => Err(a),
     }
-    wrapped_return
 }
