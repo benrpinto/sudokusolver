@@ -195,7 +195,7 @@ impl SudokuPuzzle {
         }
     }
 
-    pub fn display(&self) -> String {
+    pub fn _imperative_display(&self) -> String {
         let mut to_return:String = "".to_string();
         for row in self.individual{
             for dig in row{
@@ -204,6 +204,25 @@ impl SudokuPuzzle {
             to_return.push_str("\n");
         }
         to_return
+    }
+
+    //fold the function that prints a cell and adds it to the result
+    //we get a function that prints a row
+    //fold the function that prints a row (and a newline) and adds it to the result
+    //we get a function that prints a sudoku
+    pub fn display(&self) -> String {
+        self.individual.into_iter().fold(
+            String::new(),|mut to_return: String, row|{
+                //function that prints a row
+                to_return = row.into_iter().fold(
+                    to_return,|mut a: String, dig|{
+                        //function that prints a cell
+                        a.push_str(&dig.display());
+                        a
+                    });
+                to_return.push_str("\n");
+                to_return
+        })
     }
 }
 
