@@ -45,9 +45,9 @@ class SudokuPuzzle (input : Vector<Vector<Int>>){
                 if(individual[row][col] > 0){
                     fixedCell[row][col] = true
                     val box:Int = (row/ SQRT_DIG) + (col/SQRT_DIG)* SQRT_DIG
-                    rowDigits[row][individual[row][col]] = true
-                    colDigits[col][individual[row][col]] = true
-                    boxDigits[box][individual[row][col]] = true
+                    rowDigits[row][individual[row][col]-1] = true
+                    colDigits[col][individual[row][col]-1] = true
+                    boxDigits[box][individual[row][col]-1] = true
                 }
             }
         }
