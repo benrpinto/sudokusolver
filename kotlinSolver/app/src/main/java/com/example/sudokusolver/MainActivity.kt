@@ -21,6 +21,7 @@ class SudokuPuzzle (input : Vector<Vector<Int>>){
     private val rowDigits: Vector<Vector<Boolean>> = Vector(NUM_DIGITS)
     private val colDigits: Vector<Vector<Boolean>> = Vector(NUM_DIGITS)
     private val boxDigits: Vector<Vector<Boolean>> = Vector(NUM_DIGITS)
+    private var invalid: Boolean = false
 
     init{
         for(a in 0 until NUM_DIGITS){
@@ -45,6 +46,10 @@ class SudokuPuzzle (input : Vector<Vector<Int>>){
                 if(individual[row][col] > 0){
                     fixedCell[row][col] = true
                     val box:Int = (row/ SQRT_DIG) + (col/SQRT_DIG)* SQRT_DIG
+                    //if these are already true, then there's a double up of the digit
+                    invalid = invalid || rowDigits[row][individual[row][col]-1]
+                    invalid = invalid || colDigits[col][individual[row][col]-1]
+                    invalid = invalid || boxDigits[box][individual[row][col]-1]
                     rowDigits[row][individual[row][col]-1] = true
                     colDigits[col][individual[row][col]-1] = true
                     boxDigits[box][individual[row][col]-1] = true
@@ -54,7 +59,11 @@ class SudokuPuzzle (input : Vector<Vector<Int>>){
     }
 
     fun solve(): Boolean {
-        var index = 0
+        var index:Int = if(invalid){
+            -1
+        }else{
+            0
+        }
         var direction = 1
         while (index >=0 && index < NUM_DIGITS* NUM_DIGITS){
             val row = index/ NUM_DIGITS
@@ -113,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         val visRow:Vector<TableRow> = Vector(NUM_DIGITS)
         val visSudoku:TableLayout = findViewById(R.id.sudokuDisplay)
         val visSolve:Button = findViewById(R.id.solve)
+        val visClear:Button = findViewById(R.id.clear)
 
         for (a in 0 until NUM_DIGITS){
             visRow.add(TableRow(this))
@@ -134,6 +144,14 @@ class MainActivity : AppCompatActivity() {
                 visDigit[a][b].textSize = 30.toFloat()
                 visDigit[a][b].textAlignment = View.TEXT_ALIGNMENT_CENTER
                 visDigit[a][b].setText("")
+            }
+        }
+
+        visClear.setOnClickListener{
+            for (a in 0 until NUM_DIGITS) {
+                for (b in 0 until NUM_DIGITS) {
+                    visDigit[a][b].setText("")
+                }
             }
         }
 
