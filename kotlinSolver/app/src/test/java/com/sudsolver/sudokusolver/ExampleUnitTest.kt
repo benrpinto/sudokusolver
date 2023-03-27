@@ -1,4 +1,4 @@
-package com.example.sudokusolver
+package com.sudsolver.sudokusolver
 
 import org.junit.Test
 

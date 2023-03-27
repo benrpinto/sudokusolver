@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.sudokusolver'
+    namespace 'com.sudsolver.sudokusolver'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.sudokusolver"
+        applicationId "com.sudsolver.sudokusolver"
         minSdk 24
         targetSdk 33
         versionCode 1

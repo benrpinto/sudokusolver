@@ -1,4 +1,4 @@
-package com.example.sudokusolver
+package com.sudsolver.sudokusolver
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
